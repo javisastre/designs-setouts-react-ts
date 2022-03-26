@@ -1,17 +1,10 @@
-// Package import
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 // component & interface import
 import DataGridDisplay from "./components/DataGridDisplay";
 import NavBar from "./components/NavBar";
-import {
-  IDataObj,
-  IServerDataObj,
-  IServerUserObj,
-  IUserObj,
-  IDataBase,
-} from "./components/interfaces";
+import { IDataObj, IServerDataObj, IDataBase } from "./components/interfaces";
 
 // helpers & initialisers
 import {
@@ -37,8 +30,11 @@ const App: React.FC = () => {
     users: initialUsers,
   });
 
-  const loadUserData = async () => {
+  const loadData = async (sectionName: string) => {
     try {
+      const data = await axios.get<IServerDataObj[]>(
+        `${SERVER_URL}${sectionName.toLowerCase()}`
+      );
     } catch (err) {
       console.log();
     }
@@ -48,12 +44,12 @@ const App: React.FC = () => {
     // asynchronous data fetching
     const getAllData = async () => {
       try {
-        const { data: rawUsers } = await axios.get<IServerUserObj[]>(
+        const { data: rawUsers } = await axios.get<IServerDataObj[]>(
           `${SERVER_URL}users`
         );
 
-        const formattedUsers: IUserObj[] = rawUsers.map(
-          (user: IServerUserObj) => ({
+        const formattedUsers: IDataObj[] = rawUsers.map(
+          (user: IServerDataObj) => ({
             id: Number(user.id),
             name: user.name,
           })
@@ -73,13 +69,43 @@ const App: React.FC = () => {
             name: design.name,
             courses: Number(design.courses),
             wales: Number(design.wales),
-            updated: formatDate(design.updated),
+            updated: formatDate(String(design.updated)),
             user: getNameInitials(
               Number(design.user_id_last_update),
               formattedUsers
             ),
           })
         );
+        const modelData = (str: string, section: IServerDataObj) => {
+          switch (str) {
+            case "setout":
+              return {
+                id: Number(section.id),
+                name: section.name,
+                machineName: formatMachineName(String(section.machine_name)),
+                machineWidth: Number(section.machine_width),
+                courses: Number(section.courses),
+                updated: formatDate(String(section.updated)),
+              };
+            case "design":
+              return {
+                id: Number(section.id),
+                name: section.name,
+                courses: Number(section.courses),
+                wales: Number(section.wales),
+                updated: formatDate(String(section.updated)),
+                user: getNameInitials(
+                  Number(section.user_id_last_update),
+                  formattedUsers
+                ),
+              };
+            case "user":
+              return {
+                id: Number(section.id),
+                name: section.name,
+              };
+          }
+        };
 
         const formattedSetouts: IDataObj[] = rawSetouts.map(
           (setout: IServerDataObj) => ({
@@ -88,7 +114,7 @@ const App: React.FC = () => {
             machineName: formatMachineName(String(setout.machine_name)),
             machineWidth: Number(setout.machine_width),
             courses: Number(setout.courses),
-            updated: formatDate(setout.updated),
+            updated: formatDate(String(setout.updated)),
           })
         );
         setDataBase({
