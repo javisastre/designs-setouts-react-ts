@@ -1,12 +1,21 @@
-import React from "react";
+import React, { ReactPropTypes } from "react";
+import dayjs from "dayjs";
+
+import { IDataObj, IUserObj } from "./interfaces";
 
 interface Props {
-  someName: string;
+  data: IDataObj[];
+  users?: IUserObj[];
 }
 
 const DataGridDisplay: React.FC<Props> = (props) => {
-  const { someName } = props;
-  return <div>DataGridDisplay: {someName}</div>;
+  const { data, users } = props;
+  return (
+    <div>
+      DataGridDisplay:{data.map((d) => d.id)}
+      Users: {users?.map((u) => u.name)}
+    </div>
+  );
 };
 
 export default DataGridDisplay;
