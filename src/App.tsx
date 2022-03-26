@@ -32,9 +32,11 @@ const dateFormat = "MM[/]D[/]YY";
 
 // App component
 const App: React.FC = () => {
-  const [isDesignsMenu, setIsDesignsMenu] = useState<Boolean>(true);
+  const [menu, setMenu] = useState<String[]>([]);
   const [designsData, setDesignsData] = useState<ISection>(initialDesigns);
   const [setoutsData, setSetoutsData] = useState<ISection>(initialSetouts);
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     // asynchronous data fetching
@@ -95,9 +97,9 @@ const App: React.FC = () => {
 
   return (
     <div className='App'>
-      <NavBar setIsDesignsMenu={setIsDesignsMenu} />
+      <NavBar setIsDesignsMenu={setMenu} />
 
-      {designsData && isDesignsMenu ? (
+      {designsData && menu ? (
         <DataGridDisplay section={designsData} />
       ) : (
         <DataGridDisplay section={setoutsData} />
