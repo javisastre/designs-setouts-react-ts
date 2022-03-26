@@ -1,3 +1,9 @@
+export interface ISection {
+  name: string;
+  headers: string[];
+  data: IDataObj[];
+}
+
 export interface IDataObj {
   id: number;
   name: string;
