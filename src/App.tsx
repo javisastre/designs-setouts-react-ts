@@ -1,10 +1,19 @@
-import DataContainer from "./components/DataContainer";
+import React, { useState } from "react";
+import DataGridDisplay from "./components/DataGridDisplay";
+import NavBar from "./components/NavBar";
 
 const App: React.FC = () => {
+  const [isDesigns, setIsDesigns] = useState<Boolean>(true);
+
   return (
     <div className='App'>
-      <p>Hi</p>
-      <DataContainer />
+      <NavBar setIsDesigns={setIsDesigns} />
+
+      {isDesigns ? (
+        <DataGridDisplay someName='Laia' />
+      ) : (
+        <DataGridDisplay someName='Jeff' />
+      )}
     </div>
   );
 };
