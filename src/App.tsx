@@ -1,6 +1,7 @@
 // Package import
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import dayjs from "dayjs";
 
 // component & interface import
 import DataGridDisplay from "./components/DataGridDisplay";
@@ -19,42 +20,59 @@ const App: React.FC = () => {
   const [isDesignsMenu, setIsDesignsMenu] = useState<Boolean>(true);
   const [designsData, setDesignsData] = useState<IDataObj[]>([]);
   const [setoutsData, setSetoutsData] = useState<IDataObj[]>([]);
-  const [usersData, setUsersData] = useState<IUserObj[]>([]);
 
   useEffect(() => {
+    // asynchronous data fetching
     const getAllData = async () => {
       const { data: rawDesigns } = await axios.get<IServerDataObj[]>(
         `${SERVER_URL}designs`
       );
-      const { data: rawSetouts } = await axios.get(`${SERVER_URL}setouts`);
-      const { data: rawUsers } = await axios.get(`${SERVER_URL}users`);
+      const { data: rawSetouts } = await axios.get<IServerDataObj[]>(
+        `${SERVER_URL}setouts`
+      );
+      const { data: rawUsers } = await axios.get<IServerUserObj[]>(
+        `${SERVER_URL}users`
+      );
 
+      // user data management
+      const users: IUserObj[] = rawUsers.map((user: IServerUserObj) => ({
+        id: Number(user.id),
+        name: user.name,
+      }));
+
+      // helper formatting functions
+      const formatDate = (d: string) => dayjs(d).format("MM[/]D[/]YY");
+      const formatMachineName = (m: string) => m.split("_").join(" ");
+      const getNameInitials = (id: number) => {
+        const user = users.find((u) => u.id === id);
+        return user
+          ? user.name
+              .split(" ")
+              .map((n) => n[0])
+              .join("")
+          : "";
+      };
+
+      // data objects casting
       const designs: IDataObj[] = rawDesigns.map((design: IServerDataObj) => ({
         id: Number(design.id),
         name: design.name,
         courses: Number(design.courses),
-        updated: new Date(design.updated),
-        userIdLastUpdate: Number(design.user_id_last_update),
         wales: Number(design.wales),
-        status: design.status,
+        updated: formatDate(design.updated),
+        user: getNameInitials(Number(design.user_id_last_update)),
       }));
       setDesignsData(designs);
 
       const setouts: IDataObj[] = rawSetouts.map((setout: IServerDataObj) => ({
         id: Number(setout.id),
         name: setout.name,
+        machineName: formatMachineName(String(setout.machine_name)),
+        machineWidth: Number(setout.machine_width),
         courses: Number(setout.courses),
-        updated: new Date(setout.updated),
-        machineName: setout.machine_name,
-        machineWidth: setout.machine_width,
+        updated: formatDate(setout.updated),
       }));
       setSetoutsData(setouts);
-
-      const users: IUserObj[] = rawUsers.map((user: IServerUserObj) => ({
-        id: Number(user.id),
-        name: user.name,
-      }));
-      setUsersData(users);
     };
 
     getAllData();
@@ -67,7 +85,7 @@ const App: React.FC = () => {
       {designsData && isDesignsMenu ? (
         <DataGridDisplay data={designsData} />
       ) : (
-        <DataGridDisplay data={setoutsData} users={usersData} />
+        <DataGridDisplay data={setoutsData} />
       )}
     </div>
   );

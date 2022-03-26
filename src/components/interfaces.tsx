@@ -2,17 +2,11 @@ export interface IDataObj {
   id: number;
   name: string;
   courses: number;
-  updated: Date;
-  status?: string;
-  userIdLastUpdate?: number;
+  updated: string;
+  user?: string;
   wales?: number;
   machineName?: string;
   machineWidth?: number;
-}
-
-export interface IUserObj {
-  id: number;
-  name: string;
 }
 
 export interface IServerDataObj {
@@ -25,6 +19,11 @@ export interface IServerDataObj {
   status?: string;
   machine_name?: string;
   machine_width?: string;
+}
+
+export interface IUserObj {
+  id: number;
+  name: string;
 }
 
 export interface IServerUserObj {
