@@ -1,7 +1,13 @@
-export interface ISection {
+export interface IDataBase {
+  designs: IDataSection;
+  setouts: IDataSection;
+  users: IDataSection;
+}
+
+export interface IDataSection {
   name: string;
   headers: string[];
-  data: IDataObj[];
+  data: IDataObj[] | IUserObj[];
 }
 
 export interface IDataObj {

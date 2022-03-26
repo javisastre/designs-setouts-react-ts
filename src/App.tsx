@@ -1,7 +1,6 @@
 // Package import
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import dayjs from "dayjs";
 
 // component & interface import
 import DataGridDisplay from "./components/DataGridDisplay";
@@ -11,85 +10,105 @@ import {
   IServerDataObj,
   IServerUserObj,
   IUserObj,
-  ISection,
+  IDataBase,
 } from "./components/interfaces";
+
+// helpers & initialisers
+import {
+  initialDesigns,
+  initialSetouts,
+  initialUsers,
+} from "./components/setup";
+import {
+  formatDate,
+  formatMachineName,
+  getNameInitials,
+} from "./components/helperFunctions";
 
 // env file data
 const SERVER_URL = "http://localhost:5000/";
 
-// status initialiser & setup
-const initialDesigns = {
-  name: "Designs",
-  headers: ["Name", "Courses", "Wales", "Last Updated", "By"],
-  data: [],
-};
-const initialSetouts = {
-  name: "Setouts",
-  headers: ["Name", "Machine Name", "Machine Width", "Courses", "Last Updated"],
-  data: [],
-};
-const dateFormat = "MM[/]D[/]YY";
-
 // App component
 const App: React.FC = () => {
-  const [menu, setMenu] = useState<String[]>([]);
-  const [designsData, setDesignsData] = useState<ISection>(initialDesigns);
-  const [setoutsData, setSetoutsData] = useState<ISection>(initialSetouts);
+  const [isDesignsMenu, setIsDesignsMenu] = useState<Boolean>(true);
+  const [dataBase, setDataBase] = useState<IDataBase>({
+    designs: initialDesigns,
+    setouts: initialSetouts,
+    users: initialUsers,
+  });
 
-  useEffect(() => {}, []);
+  const loadUserData = async () => {
+    try {
+    } catch (err) {
+      console.log();
+    }
+  };
 
   useEffect(() => {
     // asynchronous data fetching
     const getAllData = async () => {
-      const { data: rawDesigns } = await axios.get<IServerDataObj[]>(
-        `${SERVER_URL}designs`
-      );
-      const { data: rawSetouts } = await axios.get<IServerDataObj[]>(
-        `${SERVER_URL}setouts`
-      );
-      const { data: rawUsers } = await axios.get<IServerUserObj[]>(
-        `${SERVER_URL}users`
-      );
+      try {
+        const { data: rawUsers } = await axios.get<IServerUserObj[]>(
+          `${SERVER_URL}users`
+        );
 
-      // user data management
-      const users: IUserObj[] = rawUsers.map((user: IServerUserObj) => ({
-        id: Number(user.id),
-        name: user.name,
-      }));
+        const formattedUsers: IUserObj[] = rawUsers.map(
+          (user: IServerUserObj) => ({
+            id: Number(user.id),
+            name: user.name,
+          })
+        );
 
-      // helper formatting functions
-      const formatDate = (d: string) => dayjs(d).format(dateFormat);
-      const formatMachineName = (m: string) => m.split("_").join(" ");
-      const getNameInitials = (id: number) => {
-        const user = users.find((u) => u.id === id);
-        return user
-          ? user.name
-              .split(" ")
-              .map((n) => n[0])
-              .join("")
-          : "";
-      };
+        const { data: rawDesigns } = await axios.get<IServerDataObj[]>(
+          `${SERVER_URL}designs`
+        );
+        const { data: rawSetouts } = await axios.get<IServerDataObj[]>(
+          `${SERVER_URL}setouts`
+        );
 
-      // data objects casting
-      const designs: IDataObj[] = rawDesigns.map((design: IServerDataObj) => ({
-        id: Number(design.id),
-        name: design.name,
-        courses: Number(design.courses),
-        wales: Number(design.wales),
-        updated: formatDate(design.updated),
-        user: getNameInitials(Number(design.user_id_last_update)),
-      }));
-      setDesignsData({ ...designsData, data: designs });
+        // data objects casting
+        const formattedDesigns: IDataObj[] = rawDesigns.map(
+          (design: IServerDataObj) => ({
+            id: Number(design.id),
+            name: design.name,
+            courses: Number(design.courses),
+            wales: Number(design.wales),
+            updated: formatDate(design.updated),
+            user: getNameInitials(
+              Number(design.user_id_last_update),
+              formattedUsers
+            ),
+          })
+        );
 
-      const setouts: IDataObj[] = rawSetouts.map((setout: IServerDataObj) => ({
-        id: Number(setout.id),
-        name: setout.name,
-        machineName: formatMachineName(String(setout.machine_name)),
-        machineWidth: Number(setout.machine_width),
-        courses: Number(setout.courses),
-        updated: formatDate(setout.updated),
-      }));
-      setSetoutsData({ ...setoutsData, data: setouts });
+        const formattedSetouts: IDataObj[] = rawSetouts.map(
+          (setout: IServerDataObj) => ({
+            id: Number(setout.id),
+            name: setout.name,
+            machineName: formatMachineName(String(setout.machine_name)),
+            machineWidth: Number(setout.machine_width),
+            courses: Number(setout.courses),
+            updated: formatDate(setout.updated),
+          })
+        );
+        setDataBase({
+          ...dataBase,
+          setouts: {
+            ...dataBase.setouts,
+            data: formattedSetouts,
+          },
+          designs: {
+            ...dataBase.designs,
+            data: formattedDesigns,
+          },
+          users: {
+            ...dataBase.users,
+            data: formattedUsers,
+          },
+        });
+      } catch (err) {
+        console.log(err);
+      }
     };
 
     getAllData();
@@ -97,12 +116,12 @@ const App: React.FC = () => {
 
   return (
     <div className='App'>
-      <NavBar setIsDesignsMenu={setMenu} />
+      <NavBar setIsDesignsMenu={setIsDesignsMenu} />
 
-      {designsData && menu ? (
-        <DataGridDisplay section={designsData} />
+      {dataBase && isDesignsMenu ? (
+        <DataGridDisplay section={dataBase.designs} />
       ) : (
-        <DataGridDisplay section={setoutsData} />
+        <DataGridDisplay section={dataBase.setouts} />
       )}
     </div>
   );
