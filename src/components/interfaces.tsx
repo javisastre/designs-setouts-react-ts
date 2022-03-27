@@ -32,3 +32,5 @@ export interface IServerDataObj {
   machine_name?: string;
   machine_width?: string;
 }
+
+export type TMenu = "designs" | "setouts";

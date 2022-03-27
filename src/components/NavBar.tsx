@@ -1,15 +1,16 @@
 import React from "react";
+import { TMenu } from "./interfaces";
 
 interface Props {
-  setIsDesignsMenu: React.Dispatch<React.SetStateAction<Boolean>>;
+  setMenu: React.Dispatch<React.SetStateAction<TMenu>>;
 }
 
 const NavBar: React.FC<Props> = (props) => {
-  const { setIsDesignsMenu } = props;
+  const { setMenu } = props;
   return (
     <div>
-      <button onClick={() => setIsDesignsMenu(true)}>Designs</button>
-      <button onClick={() => setIsDesignsMenu(false)}>Setouts</button>
+      <button onClick={() => setMenu("designs")}>Designs</button>
+      <button onClick={() => setMenu("setouts")}>Setouts</button>
     </div>
   );
 };

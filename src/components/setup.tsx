@@ -1,4 +1,9 @@
+// setup
+export const dateFormat = "MM[/]D[/]YY";
+export const SERVER_URL = "http://localhost:5000/";
+
 // status initialiser
+export const initialMenu = "designs";
 export const initialDesigns = {
   name: "Designs",
   headers: ["Name", "Courses", "Wales", "Last Updated", "By"],
@@ -14,5 +19,3 @@ export const initialUsers = {
   headers: ["Id", "Name"],
   data: [],
 };
-// setup
-export const dateFormat = "MM[/]D[/]YY";
