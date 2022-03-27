@@ -14,6 +14,9 @@ import {
 } from "./components/setup";
 import { loadData } from "./components/helperFunctions";
 
+// styles
+import "./App.css";
+
 // App component
 const App: React.FC = () => {
   const [menu, setMenu] = useState<TMenu>(initialMenu);
