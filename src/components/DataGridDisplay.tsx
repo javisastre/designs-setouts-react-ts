@@ -1,5 +1,4 @@
 import React from "react";
-import CSS from "csstype";
 
 import { IDataSection } from "./interfaces";
 
@@ -7,24 +6,20 @@ interface Props {
   section: IDataSection;
 }
 
-const headerStyle: CSS.Properties = {
-  fontWeight: "bold",
-};
-
 const DataGridDisplay: React.FC<Props> = (props) => {
   const {
     section: { headers, data },
   } = props;
 
   return (
-    <div>
+    <div className='data-grid-display'>
       <table>
-        <thead style={headerStyle}>
-          <tr>
-            {headers.map((header, i) => (
-              <th key={i}>{header}</th>
-            ))}
-          </tr>
+        <thead>
+          {headers.map((header, i) => (
+            <th key={i} id={String(i)}>
+              {header}
+            </th>
+          ))}
         </thead>
         <tbody>
           {data.map((el, i) => (

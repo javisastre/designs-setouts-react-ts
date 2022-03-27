@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 // component & interface import
 import DataGridDisplay from "./components/DataGridDisplay";
 import NavBar from "./components/NavBar";
-import { IDataObj, IDataBase, IDataSection } from "./components/interfaces";
+import { IDataObj, IDataBase } from "./components/interfaces";
 
 // helpers & initialisers
 import {
@@ -16,7 +16,7 @@ import {
 import { loadData } from "./components/helperFunctions";
 
 // styles
-import "./App.css";
+import "./styles/App.css";
 
 // App component
 const App: React.FC = () => {
@@ -27,46 +27,53 @@ const App: React.FC = () => {
     users: initialUsers,
   });
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        if (menu === "designs") {
-          const formattedUsers: IDataObj[] = await loadData("users", dataBase);
-          const formattedDesigns: IDataObj[] = await loadData(
-            "designs",
-            dataBase
-          );
-          setDataBase((d) => ({
-            ...d,
-            designs: {
-              ...d.designs,
-              data: formattedDesigns,
-            },
-            users: {
-              ...d.users,
-              data: formattedUsers,
-            },
-          }));
-        } else if (menu === "setouts") {
-          const formattedSetouts: IDataObj[] = await loadData(
-            "setouts",
-            dataBase
-          );
-          setDataBase((d) => ({
-            ...d,
-            setouts: {
-              ...d.setouts,
-              data: formattedSetouts,
-            },
-          }));
+  useEffect(
+    () => {
+      const getData = async () => {
+        try {
+          if (menu === "designs") {
+            const formattedUsers: IDataObj[] = await loadData(
+              "users",
+              dataBase.users.data
+            );
+            const formattedDesigns: IDataObj[] = await loadData(
+              "designs",
+              formattedUsers
+            );
+            setDataBase((d) => ({
+              ...d,
+              users: {
+                ...d.users,
+                data: formattedUsers,
+              },
+              designs: {
+                ...d.designs,
+                data: formattedDesigns,
+              },
+            }));
+          } else if (menu === "setouts") {
+            const formattedSetouts: IDataObj[] = await loadData(
+              "setouts",
+              dataBase.users.data
+            );
+            setDataBase((d) => ({
+              ...d,
+              setouts: {
+                ...d.setouts,
+                data: formattedSetouts,
+              },
+            }));
+          }
+        } catch (err) {
+          console.log(err);
         }
-      } catch (err) {
-        console.log(err);
-      }
-    };
+      };
 
-    getData();
-  }, [menu]);
+      getData();
+    },
+    // eslint-disable-next-line
+    [menu]
+  );
 
   return (
     <div className='App'>

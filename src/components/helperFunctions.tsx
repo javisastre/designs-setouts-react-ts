@@ -1,7 +1,12 @@
 import dayjs from "dayjs";
 import axios from "axios";
 
-import { IDataObj, IServerDataObj, IDataBase } from "./interfaces";
+import {
+  IDataObj,
+  IServerDataObj,
+  IDataBase,
+  IDataSection,
+} from "./interfaces";
 import { dateFormat } from "./setup";
 import { SERVER_URL } from "./setup";
 
@@ -25,7 +30,7 @@ export const capitalization = (word: string) =>
   `${word[0].toUpperCase()}${word.slice(1)}`;
 
 // asynchronous data fetching
-export const loadData = async (sectionName: string, db: IDataBase) => {
+export const loadData = async (sectionName: string, usersData: IDataObj[]) => {
   try {
     const { data } = await axios.get<IServerDataObj[]>(
       `${SERVER_URL}${sectionName.toLowerCase()}`
@@ -41,7 +46,7 @@ export const loadData = async (sectionName: string, db: IDataBase) => {
       ...(el.wales && { wales: Number(el.wales) }),
       ...(el.updated && { updated: formatDate(String(el.updated)) }),
       ...(el.user_id_last_update && {
-        user: getNameInitials(Number(el.user_id_last_update), db.users.data),
+        user: getNameInitials(Number(el.user_id_last_update), usersData),
       }),
     }));
     return finalData;
