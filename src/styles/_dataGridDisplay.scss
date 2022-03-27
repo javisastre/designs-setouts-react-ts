@@ -1,0 +1,22 @@
+.data-grid-display {
+  display: flex;
+  align-items: center;
+  margin-left: 60px;
+  padding-top: 10vh;
+  table {
+    text-align: center;
+    thead {
+      font-weight: 600;
+    }
+    th,
+    td {
+      column-width: 200px;
+      border-bottom: 1px solid lightgrey;
+      padding: 20px 30px;
+    }
+    td:nth-child(1),
+    th:nth-child(1) {
+      text-align: left;
+    }
+  }
+}

@@ -12,13 +12,13 @@ const NavBar: React.FC<Props> = (props) => {
   return (
     <div className='NavBar'>
       {menuList.map((option, i) => (
-        <button
+        <div
           key={i}
-          className={`button ${option === menu ? "selected" : ""}`}
+          className={`menu-item ${option === menu ? "selected" : ""}`}
           onClick={() => setMenu(option)}
         >
           {capitalization(option)}
-        </button>
+        </div>
       ))}
     </div>
   );

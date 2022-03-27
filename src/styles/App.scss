@@ -1,0 +1,7 @@
+@import "./reset", "./tables", "./navbar", "./variables", "./dataGridDisplay";
+
+.App {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  grid-auto-flow: row;
+}

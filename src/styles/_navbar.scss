@@ -1,0 +1,20 @@
+@import "./variables";
+
+.NavBar {
+  background-color: $project;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 15vh;
+  .menu-item {
+    text-align: center;
+    padding: 15px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .selected {
+    background-color: black;
+    color: white;
+    font-weight: 600;
+  }
+}
