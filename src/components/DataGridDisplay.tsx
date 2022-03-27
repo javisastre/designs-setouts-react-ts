@@ -1,6 +1,7 @@
 import React from "react";
 
 import { IDataSection } from "./interfaces";
+import UserBall from "./UserBall";
 
 interface Props {
   section: IDataSection;
@@ -15,19 +16,21 @@ const DataGridDisplay: React.FC<Props> = (props) => {
     <div className='data-grid-display'>
       <table>
         <thead>
-          {headers.map((header, i) => (
-            <th key={i} id={String(i)}>
-              {header}
-            </th>
-          ))}
+          <tr>
+            {headers.map((header, i) => (
+              <th key={i}>{header}</th>
+            ))}
+          </tr>
         </thead>
         <tbody>
           {data.map((el, i) => (
             <tr key={i}>
-              {Object.values(el)
+              {Object.entries(el)
                 .slice(1)
                 .map((spec, k) => (
-                  <td key={k}>{spec}</td>
+                  <td key={k}>
+                    {spec[0] === "user" ? <UserBall user={spec[1]} /> : spec[1]}
+                  </td>
                 ))}
             </tr>
           ))}

@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AAEA,AAAA,UAAU,CAAC;EACT,gBAAgB,ECHD,OAAO;CDIvB",
+    "sources": [
+        "userBall.scss",
+        "_variables.scss"
+    ],
+    "names": [],
+    "file": "userBall.css"
+}

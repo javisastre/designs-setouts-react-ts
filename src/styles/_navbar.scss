@@ -1,7 +1,7 @@
 @import "./variables";
 
 .NavBar {
-  background-color: $project;
+  background-color: $corporateColor;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -11,10 +11,22 @@
     padding: 15px;
     font-weight: 500;
     cursor: pointer;
+    transition: ease-in-out 0.3s;
+    &:hover {
+      color: lightgrey;
+      background-color: darkslategrey;
+      transition: ease-in-out 0.4s;
+    }
   }
   .selected {
     background-color: black;
     color: white;
     font-weight: 600;
+    transition: ease-in-out 0.43;
+    &:hover {
+      background-color: black;
+      color: gray;
+      transition: ease-in-out 0.2s;
+    }
   }
 }
