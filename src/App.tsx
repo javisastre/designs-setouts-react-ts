@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 // component & interface import
 import DataGridDisplay from "./components/DataGridDisplay";
 import NavBar from "./components/NavBar";
-import { IDataObj, IDataBase, TMenu } from "./components/interfaces";
+import { IDataObj, IDataBase, IDataSection } from "./components/interfaces";
 
 // helpers & initialisers
 import {
@@ -11,6 +11,7 @@ import {
   initialSetouts,
   initialUsers,
   initialMenu,
+  menuList,
 } from "./components/setup";
 import { loadData } from "./components/helperFunctions";
 
@@ -19,7 +20,7 @@ import "./App.css";
 
 // App component
 const App: React.FC = () => {
-  const [menu, setMenu] = useState<TMenu>(initialMenu);
+  const [menu, setMenu] = useState<string>(initialMenu);
   const [dataBase, setDataBase] = useState<IDataBase>({
     designs: initialDesigns,
     setouts: initialSetouts,
@@ -69,14 +70,17 @@ const App: React.FC = () => {
 
   return (
     <div className='App'>
-      <NavBar setMenu={setMenu} />
-
-      {dataBase && menu === "designs" && (
-        <DataGridDisplay section={dataBase.designs} />
-      )}
-      {dataBase && menu === "setouts" && (
-        <DataGridDisplay section={dataBase.setouts} />
-      )}
+      <NavBar setMenu={setMenu} menu={menu} menuList={menuList} />
+      {dataBase &&
+        menuList.map(
+          (option, i) =>
+            menu === option && (
+              <DataGridDisplay
+                key={i}
+                section={dataBase[option as keyof IDataBase]}
+              />
+            )
+        )}
     </div>
   );
 };

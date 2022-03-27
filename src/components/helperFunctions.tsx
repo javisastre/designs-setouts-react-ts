@@ -21,6 +21,9 @@ export const getNameInitials = (id: number, users: IDataObj[]) => {
     : "";
 };
 
+export const capitalization = (word: string) =>
+  `${word[0].toUpperCase()}${word.slice(1)}`;
+
 // asynchronous data fetching
 export const loadData = async (sectionName: string, db: IDataBase) => {
   try {

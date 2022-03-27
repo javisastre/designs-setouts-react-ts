@@ -1,16 +1,25 @@
 import React from "react";
-import { TMenu } from "./interfaces";
+import { capitalization } from "./helperFunctions";
 
 interface Props {
-  setMenu: React.Dispatch<React.SetStateAction<TMenu>>;
+  setMenu: React.Dispatch<React.SetStateAction<string>>;
+  menu: string;
+  menuList: string[];
 }
 
 const NavBar: React.FC<Props> = (props) => {
-  const { setMenu } = props;
+  const { setMenu, menu, menuList } = props;
   return (
-    <div>
-      <button onClick={() => setMenu("designs")}>Designs</button>
-      <button onClick={() => setMenu("setouts")}>Setouts</button>
+    <div className='NavBar'>
+      {menuList.map((option, i) => (
+        <button
+          key={i}
+          className={`button ${option === menu ? "selected" : ""}`}
+          onClick={() => setMenu(option)}
+        >
+          {capitalization(option)}
+        </button>
+      ))}
     </div>
   );
 };
