@@ -1,31 +1,33 @@
 # **Designs & Setouts app**
 
-A simple, two views app that shows certain info from a `db.json` . It is using the following technology:
+A simple two-view app that renders a table of information from a `db.json` . It is designed using the following technology:
 
-- React
-- TypeScript
-- json-server
-- axios
-- dayjs
+- React: the front end library developed by Facebook.
+- TypeScript: a supersetted, typed flavour of JavaScript.
+- json-server: handles the mock server to serve `db.json`.
+- concurrently: handles running several scripts at a time.
+- axios: handles `get` requests to the server.
+- dayjs: helps quickly format dates.
+- scss / sass: a better `CSS` experience.
+
+## Visuals
 
 The `designs` view:
 
-![designs](/home/javi/MEGA/Code/tech_challenges/CADT-test/cadt-react-test/public/designs.png)
+![designs](./public/designs.png)
 
 The `setouts` view:
 
-![setouts](/home/javi/MEGA/Code/tech_challenges/CADT-test/cadt-react-test/public/setouts.png)
+![setouts](./public/setouts.png)
 
-#### **Available Scripts**
+## Script to run the application
 
-In the project directory, you can run:
+### `npm run rundevel`
 
-### `npm start`
+## Backlog
 
-### `npm test`
+Future improvements would include the implementation of the following features:
 
-### `npm run build`
-
-### `npm run eject`
-
-*Note: this is a one-way operation. Once you `eject`, you can’t go back!*
+- 60% test coverage using JEST and React Testing Library.
+- Adding a modal to edit designs or setouts by clicking on each row.
+- Responsive version.
