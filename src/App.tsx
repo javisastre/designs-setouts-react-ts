@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import DataGridDisplay from "./components/DataGridDisplay";
 import NavBar from "./components/NavBar";
 import { IDataObj, IDataBase } from "./components/interfaces";
+import ErrorAlert from "./components/ErrorAlert";
 
 // helpers & initialisers
 import {
@@ -26,20 +27,28 @@ const App: React.FC = () => {
     setouts: initialSetouts,
     users: initialUsers,
   });
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(
     () => {
       const getData = async () => {
         try {
           if (menu === "designs") {
-            const formattedUsers: IDataObj[] = await loadData(
+            const formattedUsers: IDataObj[] | Error = await loadData(
               "users",
               dataBase.users.data
             );
-            const formattedDesigns: IDataObj[] = await loadData(
+
+            if (formattedUsers instanceof Error) throw String(formattedUsers);
+
+            const formattedDesigns: IDataObj[] | Error = await loadData(
               "designs",
               formattedUsers
             );
+
+            if (formattedDesigns instanceof Error)
+              throw String(formattedDesigns);
+
             setDataBase((d) => ({
               ...d,
               users: {
@@ -52,10 +61,14 @@ const App: React.FC = () => {
               },
             }));
           } else if (menu === "setouts") {
-            const formattedSetouts: IDataObj[] = await loadData(
+            const formattedSetouts: IDataObj[] | Error = await loadData(
               "setouts",
               dataBase.users.data
             );
+
+            if (formattedSetouts instanceof Error)
+              throw String(formattedSetouts);
+
             setDataBase((d) => ({
               ...d,
               setouts: {
@@ -66,6 +79,7 @@ const App: React.FC = () => {
           }
         } catch (err) {
           console.log(err);
+          setError(String(err));
         }
       };
 
@@ -77,17 +91,26 @@ const App: React.FC = () => {
 
   return (
     <div className='App'>
-      <NavBar setMenu={setMenu} menu={menu} menuList={menuList} />
-      {dataBase &&
-        menuList.map(
-          (option, i) =>
-            menu === option && (
-              <DataGridDisplay
-                key={i}
-                section={dataBase[option as keyof IDataBase]}
-              />
-            )
-        )}
+      {error && (
+        <div>
+          <ErrorAlert errorMessage={error} />
+        </div>
+      )}
+      {!error && (
+        <>
+          <NavBar setMenu={setMenu} menu={menu} menuList={menuList} />
+          {dataBase &&
+            menuList.map(
+              (option, i) =>
+                menu === option && (
+                  <DataGridDisplay
+                    key={i}
+                    section={dataBase[option as keyof IDataBase]}
+                  />
+                )
+            )}
+        </>
+      )}
     </div>
   );
 };

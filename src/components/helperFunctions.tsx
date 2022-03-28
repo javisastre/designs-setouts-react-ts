@@ -1,12 +1,7 @@
 import dayjs from "dayjs";
 import axios from "axios";
 
-import {
-  IDataObj,
-  IServerDataObj,
-  IDataBase,
-  IDataSection,
-} from "./interfaces";
+import { IDataObj, IServerDataObj } from "./interfaces";
 import { dateFormat } from "./setup";
 import { SERVER_URL } from "./setup";
 
@@ -35,6 +30,7 @@ export const loadData = async (sectionName: string, usersData: IDataObj[]) => {
     const { data } = await axios.get<IServerDataObj[]>(
       `${SERVER_URL}${sectionName.toLowerCase()}`
     );
+
     const finalData: IDataObj[] = data.map((el: IServerDataObj) => ({
       id: Number(el.id),
       name: el.name,
@@ -51,8 +47,6 @@ export const loadData = async (sectionName: string, usersData: IDataObj[]) => {
     }));
     return finalData;
   } catch (err) {
-    console.log(err);
-    const data: IDataObj[] = [];
-    return data;
+    return err as Error;
   }
 };
