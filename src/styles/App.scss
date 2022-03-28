@@ -1,5 +1,9 @@
-@import "./reset", "./errorAlert", "./tables", "./navbar", "./variables",
-  "./dataGridDisplay", "./userBall";
+@import "./variables";
+@import "./navbar";
+@import "./dataGridDisplay";
+@import "./errorAlert";
+@import "./reset";
+@import "./userBall";
 
 .App {
   width: 100vw;

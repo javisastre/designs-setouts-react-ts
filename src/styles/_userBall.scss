@@ -1,0 +1,13 @@
+@import "./variables";
+
+.user-ball {
+  height: 45px;
+  width: 45px;
+  background-color: $corporateColor;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  color: white;
+}

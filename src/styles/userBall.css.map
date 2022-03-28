@@ -1,6 +1,6 @@
 {
     "version": 3,
-    "mappings": "AAEA,AAAA,UAAU,CAAC;EACT,gBAAgB,ECHD,OAAO;CDIvB",
+    "mappings": "AAEA,AAAA,UAAU,CAAC;EACT,MAAM,EAAE,IAAI;EACZ,gBAAgB,ECJD,OAAO;CDKvB",
     "sources": [
         "userBall.scss",
         "_variables.scss"

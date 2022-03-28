@@ -8,8 +8,8 @@ const UserBall: React.FC<Props> = (props) => {
   const { user } = props;
 
   return (
-    <div>
-      <div className='user-ball'>{user}</div>
+    <div className='user-ball'>
+      <div>{user}</div>
     </div>
   );
 };

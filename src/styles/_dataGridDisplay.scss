@@ -21,6 +21,8 @@
     th:last-child,
     td:last-child {
       padding-right: 300px;
+      display: flex;
+      justify-content: center;
     }
   }
 }
